@@ -65,7 +65,7 @@ const TaskBoard = function () {
     if (!transition) {
       return null;
     }
-  
+
     return TasksRepository.update(task.id, { stateEvent: transition.event })
       .then(() => {
         loadColumnInitial(destination.toColumnId);
