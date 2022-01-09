@@ -25,7 +25,7 @@ const initialBoard = {
   })),
 };
 
-const TaskBoard = function () {
+const TaskBoard = () => {
   const [board, setBoard] = useState(initialBoard);
   const [boardCards, setBoardCards] = useState([]);
 
