@@ -33,6 +33,7 @@ const Task = ({ onClick, task }) => {
 
 Task.propTypes = {
   task: PropTypes.shape().isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 export default Task;

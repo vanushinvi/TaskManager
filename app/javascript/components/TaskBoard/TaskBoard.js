@@ -90,20 +90,6 @@ const TaskBoard = () => {
         alert(`Move failed! ${error.message}`);
       });
   };
-
-  const generateBoard = () => {
-    const board = {
-      columns: STATES.map(({ key, value }) => ({
-        id: key,
-        title: value,
-        cards: propOr({}, 'cards', boardCards[key]),
-        meta: propOr({}, 'meta', boardCards[key]),
-      })),
-    };
-
-    setBoard(board);
-  };
-
   const handleOpenAddPopup = () => {
     setMode(MODES.ADD);
   };
@@ -143,6 +129,19 @@ const TaskBoard = () => {
     });
   };
 
+  const generateBoard = () => {
+    const newboard = {
+      columns: STATES.map(({ key, value }) => ({
+        id: key,
+        title: value,
+        cards: propOr({}, 'cards', boardCards[key]),
+        meta: propOr({}, 'meta', boardCards[key]),
+      })),
+    };
+
+    setBoard(newboard);
+  };
+
   const loadBoard = () => {
     STATES.map(({ key }) => loadColumnInitial(key));
   };
@@ -165,9 +164,9 @@ const TaskBoard = () => {
       {mode === MODES.ADD && <AddPopup onCreateCard={handleTaskCreate} onClose={handleClose} />}
       {mode === MODES.EDIT && (
         <EditPopup
-          onLoadCard={loadTask}
-          onDestroyCard={handleTaskDestroy}
-          onUpdateCard={handleTaskUpdate}
+          onCardLoad={loadTask}
+          onCardDestroy={handleTaskDestroy}
+          onCardUpdate={handleTaskUpdate}
           onClose={handleClose}
           cardId={openedTaskId}
         />
