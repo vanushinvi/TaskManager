@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import KanbanBoard from '@lourenci/react-kanban';
+import '@lourenci/react-kanban/dist/styles.css';
 import { propOr } from 'ramda';
 
 import Task from 'components/Task';
@@ -39,9 +40,9 @@ const initialBoard = {
 
 const TaskBoard = () => {
   const styles = useStyles();
-  const [mode, setMode] = useState(MODES.NONE);
   const [board, setBoard] = useState(initialBoard);
   const [boardCards, setBoardCards] = useState([]);
+  const [mode, setMode] = useState(MODES.NONE);
   const [openedTaskId, setOpenedTaskId] = useState(null);
 
   const loadColumn = (state, page, perPage) =>
@@ -149,11 +150,12 @@ const TaskBoard = () => {
   useEffect(() => generateBoard(), [boardCards]);
 
   return (
-    <>
+    <div>
       <KanbanBoard
+        disableColumnDrag
+        onCardDragEnd={handleCardDragEnd}
         renderCard={(card) => <Task onClick={handleOpenEditPopup} task={card} />}
         renderColumnHeader={(column) => <ColumnHeader column={column} onLoadMore={loadColumnMore} />}
-        onCardDragEnd={handleCardDragEnd}
       >
         {board}
       </KanbanBoard>
@@ -171,7 +173,7 @@ const TaskBoard = () => {
           cardId={openedTaskId}
         />
       )}
-    </>
+    </div>
   );
 };
 
