@@ -13,7 +13,7 @@ class Task < ApplicationRecord
     end
 
     event :go_to_qa do
-      transition new_task: :in_qa
+      transition in_development: :in_qa
     end
 
     event :go_to_code_review do

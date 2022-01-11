@@ -1,5 +1,5 @@
 class Api::ApplicationController < ApplicationController
-  include ::AuthHelper
+  include AuthHelper
   helper_method :current_user
   respond_to :json
 end
