@@ -14,6 +14,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import useStyles from './useStyles';
+import TaskPresenter from 'presenters/TaskPresenter';
 
 const EditPopup = ({ cardId, onClose, onCardDestroy, onCardLoad, onCardUpdate }) => {
   const [task, setTask] = useState(null);
@@ -58,7 +59,11 @@ const EditPopup = ({ cardId, onClose, onCardDestroy, onCardLoad, onCardUpdate })
               <CloseIcon />
             </IconButton>
           }
-          title={isLoading ? 'Your task is loading. Please be patient.' : `Task # ${task.id} [${task.name}]`}
+          title={
+            isLoading
+              ? 'Your task is loading. Please be patient.'
+              : `Task # ${TaskPresenter.id(task)} [${TaskPresenter.name(task)}}]`
+          }
         />
         <CardContent>
           {isLoading ? (
