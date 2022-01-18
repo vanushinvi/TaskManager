@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import KanbanBoard from '@lourenci/react-kanban';
+import '@lourenci/react-kanban/dist/styles.css';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -14,11 +15,12 @@ import useStyles from './useStyles';
 
 const MODES = {
   ADD: 'add',
+  EDIT: 'edit',
   NONE: 'none',
 };
 
 const TaskBoard = () => {
-  const { board, loadBoard } = useTasks();
+  const { board, loadBoard, loadColumnMore, createTask, loadTask, destroyTask, updateTask, dragEndCard } = useTasks();
   const [mode, setMode] = useState(MODES.NONE);
   const [openedTaskId, setOpenedTaskId] = useState(null);
   const styles = useStyles();
@@ -41,12 +43,31 @@ const TaskBoard = () => {
     setOpenedTaskId(null);
   };
 
-  const loadColumnMore = () => {};
-  const handleCardDragEnd = () => {};
-  const handleTaskCreate = () => {};
-  const handleTaskLoad = () => {};
-  const handleTaskUpdate = () => {};
-  const handleTaskDestroy = () => {};
+  const handleLoadColumnMore = (state, page = 1, perPage = 10) => {
+    loadColumnMore(state, page, perPage);
+  };
+
+  const handleCardDragEnd = (task, source, destination) => {
+    dragEndCard(task, source, destination);
+  };
+
+  const handleTaskCreate = (params) => {
+    createTask(params);
+    handleClose();
+  };
+
+  const handleTaskLoad = (id) => loadTask(id);
+
+  const handleTaskUpdate = (task) => {
+    updateTask(task);
+    handleClose();
+  };
+
+  const handleTaskDestroy = (task) => {
+    destroyTask(task).then(() => {
+      handleClose();
+    });
+  };
 
   return (
     <>
@@ -58,7 +79,7 @@ const TaskBoard = () => {
         disableColumnDrag
         onCardDragEnd={handleCardDragEnd}
         renderCard={(card) => <Task onClick={handleOpenEditPopup} task={card} />}
-        renderColumnHeader={(column) => <ColumnHeader column={column} onLoadMore={loadColumnMore} />}
+        renderColumnHeader={(column) => <ColumnHeader column={column} onLoadMore={handleLoadColumnMore} />}
       >
         {board}
       </KanbanBoard>
@@ -66,7 +87,7 @@ const TaskBoard = () => {
       {mode === MODES.ADD && <AddPopup onCreateCard={handleTaskCreate} onClose={handleClose} />}
       {mode === MODES.EDIT && (
         <EditPopup
-          onLoadCard={handleTaskLoad}
+          onCardLoad={handleTaskLoad}
           onCardDestroy={handleTaskDestroy}
           onCardUpdate={handleTaskUpdate}
           onClose={handleClose}
