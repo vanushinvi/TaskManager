@@ -85,11 +85,27 @@ export const useTasksActions = () => {
 
   const loadtask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
 
+  const destroytask = (task) => {
+    TasksRepository.destroy(TaskPresenter.id(task)).then(() => {
+      loadColumn(TaskPresenter.state(task));
+    });
+  };
+
+  const updatetask = (task) => {
+    const attributes = TaskForm.attributesToSubmit(task);
+
+    return TasksRepository.update(TaskPresenter.id(task), attributes).then(() => {
+      loadColumn(TaskPresenter.state(task));
+    });
+  };
+
   return {
     loadBoard,
     loadColumn,
     loadColumnMore,
     createtask,
     loadtask,
+    destroytask,
+    updatetask,
   };
 };
