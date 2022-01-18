@@ -76,17 +76,20 @@ export const useTasksActions = () => {
 
   const loadBoard = () => STATES.map(({ key }) => loadColumn(key));
 
-  const TaskCreate = (params) => {
+  const createtask = (params) => {
     const attributes = TaskForm.attributesToSubmit(params);
     return TasksRepository.create(attributes).then(({ data: { task } }) => {
       loadColumn(TaskPresenter.state(task));
     });
   };
 
+  const loadtask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
+
   return {
     loadBoard,
     loadColumn,
     loadColumnMore,
-    TaskCreate,
+    createtask,
+    loadtask,
   };
 };
