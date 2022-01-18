@@ -76,22 +76,22 @@ export const useTasksActions = () => {
 
   const loadBoard = () => STATES.map(({ key }) => loadColumn(key));
 
-  const createtask = (params) => {
+  const createTask = (params) => {
     const attributes = TaskForm.attributesToSubmit(params);
     return TasksRepository.create(attributes).then(({ data: { task } }) => {
       loadColumn(TaskPresenter.state(task));
     });
   };
 
-  const loadtask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
+  const loadTask = (id) => TasksRepository.show(id).then(({ data: { task } }) => task);
 
-  const destroytask = (task) => {
+  const destroyTask = (task) => {
     TasksRepository.destroy(TaskPresenter.id(task)).then(() => {
       loadColumn(TaskPresenter.state(task));
     });
   };
 
-  const updatetask = (task) => {
+  const updateTask = (task) => {
     const attributes = TaskForm.attributesToSubmit(task);
 
     return TasksRepository.update(TaskPresenter.id(task), attributes).then(() => {
@@ -99,13 +99,31 @@ export const useTasksActions = () => {
     });
   };
 
+  const dragEndCard = (task, source, destination) => {
+    const transition = task.transitions.find(({ to }) => destination.toColumnId === to);
+
+    if (!transition) {
+      return null;
+    }
+
+    return TasksRepository.update(TaskPresenter.id(task), { stateEvent: transition.event })
+      .then(() => {
+        loadColumn(destination.toColumnId);
+        loadColumn(source.fromColumnId);
+      })
+      .catch((error) => {
+        alert(`Moves failed! ${error.message}`);
+      });
+  };
+
   return {
     loadBoard,
     loadColumn,
     loadColumnMore,
-    createtask,
-    loadtask,
-    destroytask,
-    updatetask,
+    createTask,
+    loadTask,
+    destroyTask,
+    updateTask,
+    dragEndCard,
   };
 };
