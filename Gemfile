@@ -69,3 +69,4 @@ gem 'ransack', github: 'activerecord-hackery/ransack'
 gem 'responders'
 gem 'active_model_serializers'
 gem 'js-routes'
+gem 'simplecov', require: false, group: :test
